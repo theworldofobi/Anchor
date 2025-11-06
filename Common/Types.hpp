@@ -5,7 +5,8 @@
 
 #include "Macros.hpp"
 
-namespace Common {
+namespace Common 
+{
   constexpr size_t LOG_QUEUE_SIZE = 8 * 1024 * 1024;
   constexpr size_t ME_MAX_TICKERS = 8;
   constexpr size_t ME_MAX_CLIENT_UPDATES = 256 * 1024;
@@ -17,8 +18,10 @@ namespace Common {
   typedef uint64_t OrderId;
   constexpr auto OrderId_INVALID = std::numeric_limits<OrderId>::max();
 
-  inline auto orderIdToString(OrderId order_id) -> std::string {
-    if (UNLIKELY(order_id == OrderId_INVALID)) {
+  inline auto orderIdToString(OrderId order_id) -> std::string 
+  {
+    if (UNLIKELY(order_id == OrderId_INVALID)) 
+    {
       return "INVALID";
     }
 
@@ -28,8 +31,10 @@ namespace Common {
   typedef uint32_t TickerId;
   constexpr auto TickerId_INVALID = std::numeric_limits<TickerId>::max();
 
-  inline auto tickerIdToString(TickerId ticker_id) -> std::string {
-    if (UNLIKELY(ticker_id == TickerId_INVALID)) {
+  inline auto tickerIdToString(TickerId ticker_id) -> std::string 
+  {
+    if (UNLIKELY(ticker_id == TickerId_INVALID)) 
+    {
       return "INVALID";
     }
 
@@ -39,8 +44,10 @@ namespace Common {
   typedef uint32_t ClientId;
   constexpr auto ClientId_INVALID = std::numeric_limits<ClientId>::max();
 
-  inline auto clientIdToString(ClientId client_id) -> std::string {
-    if (UNLIKELY(client_id == ClientId_INVALID)) {
+  inline auto clientIdToString(ClientId client_id) -> std::string 
+  {
+    if (UNLIKELY(client_id == ClientId_INVALID)) 
+    {
       return "INVALID";
     }
 
@@ -50,8 +57,10 @@ namespace Common {
   typedef int64_t Price;
   constexpr auto Price_INVALID = std::numeric_limits<Price>::max();
 
-  inline auto priceToString(Price price) -> std::string {
-    if (UNLIKELY(price == Price_INVALID)) {
+  inline auto priceToString(Price price) -> std::string 
+  {
+    if (UNLIKELY(price == Price_INVALID)) 
+    {
       return "INVALID";
     }
 
@@ -61,8 +70,10 @@ namespace Common {
   typedef uint32_t Quantity;
   constexpr auto Quantity_INVALID = std::numeric_limits<Quantity>::max();
 
-  inline auto quantityToString(Quantity quantity) -> std::string {
-    if (UNLIKELY(quantity == Quantity_INVALID)) {
+  inline auto quantityToString(Quantity quantity) -> std::string 
+  {
+    if (UNLIKELY(quantity == Quantity_INVALID)) 
+    {
       return "INVALID";
     }
 
@@ -72,22 +83,27 @@ namespace Common {
   typedef uint64_t Priority;
   constexpr auto Priority_INVALID = std::numeric_limits<Priority>::max();
 
-  inline auto priorityToString(Priority priority) -> std::string {
-    if (UNLIKELY(priority == Priority_INVALID)) {
+  inline auto priorityToString(Priority priority) -> std::string 
+  {
+    if (UNLIKELY(priority == Priority_INVALID)) 
+    {
       return "INVALID";
     }
 
     return std::to_string(priority);
   }
 
-  enum class Side : int8_t {
+  enum class Side : int8_t 
+  {
     INVALID = 0,
     BUY = 1,
     SELL = -1
   };
 
-  inline auto sideToString(Side side) -> std::string {
-    switch (side) {
+  inline auto sideToString(Side side) -> std::string 
+  {
+    switch (side) 
+    {
       case Side::BUY:
         return "BUY";
       case Side::SELL:
