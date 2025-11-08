@@ -80,7 +80,7 @@ namespace Trading
 
     auto checkPreTradeRisk(TickerId ticker_id, Side side, Quantity quantity) const noexcept 
     {
-      return ticker_risk_.at(ticker_id).checkPreTradeRisk(side, qty);
+      return ticker_risk_.at(ticker_id).checkPreTradeRisk(side, quantity);
     }
 
     // Deleted default, copy & move constructors and assignment-operators.

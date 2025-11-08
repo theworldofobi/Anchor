@@ -30,14 +30,14 @@ namespace Trading
       case Exchange::MarketUpdateType::ADD: 
       {
         auto order = order_pool_.allocate(market_update->order_id_, market_update->side_, market_update->price_,
-                                          market_update->qty_, market_update->priority_, nullptr, nullptr);
+                                          market_update->quantity_, market_update->priority_, nullptr, nullptr);
         addOrder(order);
       }
         break;
       case Exchange::MarketUpdateType::MODIFY: 
       {
         auto order = oid_to_order_.at(market_update->order_id_);
-        order->qty_ = market_update->qty_;
+        order->quantity_ = market_update->quantity_;
       }
         break;
       case Exchange::MarketUpdateType::CANCEL: 
@@ -101,12 +101,12 @@ namespace Trading
                        bool sanity_check) 
     {
       char buf[4096];
-      Qty qty = 0;
+      Quantity quantity = 0;
       size_t num_orders = 0;
 
       for (auto o_itr = itr->first_mkt_order_;; o_itr = o_itr->next_order_) 
       {
-        qty += o_itr->qty_;
+        quantity += o_itr->quantity_;
         ++num_orders;
         if (o_itr->next_order_ == itr->first_mkt_order_)
           break;
@@ -114,14 +114,14 @@ namespace Trading
       sprintf(buf, " <px:%3s p:%3s n:%3s> %-3s @ %-5s(%-4s)",
               priceToString(itr->price_).c_str(), priceToString(itr->prev_entry_->price_).c_str(),
               priceToString(itr->next_entry_->price_).c_str(),
-              priceToString(itr->price_).c_str(), qtyToString(qty).c_str(), std::to_string(num_orders).c_str());
+              priceToString(itr->price_).c_str(), quantityToString(quantity).c_str(), std::to_string(num_orders).c_str());
       ss << buf;
       for (auto o_itr = itr->first_mkt_order_;; o_itr = o_itr->next_order_) 
       {
         if (detailed) 
         {
           sprintf(buf, "[oid:%s q:%s p:%s n:%s] ",
-                  orderIdToString(o_itr->order_id_).c_str(), qtyToString(o_itr->qty_).c_str(),
+                  orderIdToString(o_itr->order_id_).c_str(), quantityToString(o_itr->quantity_).c_str(),
                   orderIdToString(o_itr->prev_order_ ? o_itr->prev_order_->order_id_ : OrderId_INVALID).c_str(),
                   orderIdToString(o_itr->next_order_ ? o_itr->next_order_->order_id_ : OrderId_INVALID).c_str());
           ss << buf;

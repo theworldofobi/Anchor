@@ -10,7 +10,7 @@ namespace Exchange {
        << "moid:" << orderIdToString(market_order_id_) << " "
        << "side:" << sideToString(side_) << " "
        << "price:" << priceToString(price_) << " "
-       << "qty:" << quantityToString(quantity_) << " "
+       << "quantity:" << quantityToString(quantity_) << " "
        << "prio:" << priorityToString(priority_) << " "
        << "prev:" << orderIdToString(prev_order_ ? prev_order_->market_order_id_ : OrderId_INVALID) << " "
        << "next:" << orderIdToString(next_order_ ? next_order_->market_order_id_ : OrderId_INVALID) << "]";

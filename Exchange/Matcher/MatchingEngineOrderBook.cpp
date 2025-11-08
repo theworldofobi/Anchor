@@ -21,46 +21,46 @@ namespace Exchange {
     }
   }
 
-  auto MEOrderBook::match(TickerId ticker_id, ClientId client_id, Side side, OrderId client_order_id, OrderId new_market_order_id, MEOrder* itr, Qty* leaves_qty) noexcept {
+  auto MEOrderBook::match(TickerId ticker_id, ClientId client_id, Side side, OrderId client_order_id, OrderId new_market_order_id, MEOrder* itr, Quantity* leaves_quantity) noexcept {
     const auto order = itr;
-    const auto order_qty = order->quantity_;
-    const auto fill_qty = std::min(*leaves_qty, order_qty);
+    const auto order_quantity = order->quantity_;
+    const auto fill_quantity = std::min(*leaves_quantity, order_quantity);
 
-    *leaves_qty -= fill_qty;
-    order->qty_ -= fill_qty;
+    *leaves_quantity -= fill_quantity;
+    order->quantity_ -= fill_quantity;
 
     client_response_ = {ClientResponseType::FILLED, client_id, ticker_id, client_order_id,
-                        new_market_order_id, side, itr->price_, fill_qty, *leaves_qty};
+                        new_market_order_id, side, itr->price_, fill_quantity, *leaves_quantity};
     matching_engine_->sendClientResponse(&client_response_);
 
     client_response_ = {ClientResponseType::FILLED, order->client_id_, ticker_id, order->client_order_id_,
-                        order->market_order_id_, order->side_, itr->price_, fill_qty, order->qty_};
+                        order->market_order_id_, order->side_, itr->price_, fill_quantity, order->quantity_};
     matching_engine_->sendClientResponse(&client_response_);
 
-    market_update_ = {MarketUpdateType::TRADE, OrderId_INVALID, ticker_id, side, itr->price_, fill_qty, Priority_INVALID};
+    market_update_ = {MarketUpdateType::TRADE, OrderId_INVALID, ticker_id, side, itr->price_, fill_quantity, Priority_INVALID};
     matching_engine_->sendMarketUpdate(&market_update_);
 
-    if (!order->qty_) 
+    if (!order->quantity_) 
     {
       market_update_ = {MarketUpdateType::CANCEL, order->market_order_id_, ticker_id, order->side_,
-                        order->price_, order_qty, Priority_INVALID};
+                        order->price_, order_quantity, Priority_INVALID};
       matching_engine_->sendMarketUpdate(&market_update_);
 
       removeOrder(order);
     } else 
     {
       market_update_ = {MarketUpdateType::MODIFY, order->market_order_id_, ticker_id, order->side_,
-                        order->price_, order->qty_, order->priority_};
+                        order->price_, order->quantity_, order->priority_};
       matching_engine_->sendMarketUpdate(&market_update_);
     }
   }
 
-  auto MEOrderBook::checkForMatch(ClientId client_id, OrderId client_order_id, TickerId ticker_id, Side side, Price price, Qty qty, Qty new_market_order_id) noexcept {
-    auto leaves_qty = qty;
+  auto MEOrderBook::checkForMatch(ClientId client_id, OrderId client_order_id, TickerId ticker_id, Side side, Price price, Quantity quantity, Quantity new_market_order_id) noexcept {
+    auto leaves_quantity = quantity;
 
     if (side == Side::BUY) 
     {
-      while (leaves_qty && asks_by_price_) 
+      while (leaves_quantity && asks_by_price_) 
       {
         const auto ask_itr = asks_by_price_->first_me_order_;
         if (LIKELY(price < ask_itr->price_)) 
@@ -68,41 +68,41 @@ namespace Exchange {
           break;
         }
 
-        match(ticker_id, client_id, side, client_order_id, new_market_order_id, ask_itr, &leaves_qty);
+        match(ticker_id, client_id, side, client_order_id, new_market_order_id, ask_itr, &leaves_quantity);
       }
     }
     if (side == Side::SELL) 
     {
-      while (leaves_qty && bids_by_price_) 
+      while (leaves_quantity && bids_by_price_) 
       {
         const auto bid_itr = bids_by_price_->first_me_order_;
         if (LIKELY(price > bid_itr->price_)) {
           break;
         }
 
-        match(ticker_id, client_id, side, client_order_id, new_market_order_id, bid_itr, &leaves_qty);
+        match(ticker_id, client_id, side, client_order_id, new_market_order_id, bid_itr, &leaves_quantity);
       }
     }
 
-    return leaves_qty;
+    return leaves_quantity;
   }
 
-  auto MEOrderBook::add(ClientId client_id, OrderId client_order_id, TickerId ticker_id, Side side, Price price, Qty qty) noexcept -> void {
+  auto MEOrderBook::add(ClientId client_id, OrderId client_order_id, TickerId ticker_id, Side side, Price price, Quantity quantity) noexcept -> void {
     const auto new_market_order_id = generateNewMarketOrderId();
-    client_response_ = {ClientResponseType::ACCEPTED, client_id, ticker_id, client_order_id, new_market_order_id, side, price, 0, qty};
+    client_response_ = {ClientResponseType::ACCEPTED, client_id, ticker_id, client_order_id, new_market_order_id, side, price, 0, quantity};
     matching_engine_->sendClientResponse(&client_response_);
 
-    const auto leaves_qty = checkForMatch(client_id, client_order_id, ticker_id, side, price, qty, new_market_order_id);
+    const auto leaves_quantity = checkForMatch(client_id, client_order_id, ticker_id, side, price, quantity, new_market_order_id);
 
-    if (LIKELY(leaves_qty)) 
+    if (LIKELY(leaves_quantity)) 
     {
       const auto priority = getNextPriority(price);
 
-      auto order = order_pool_.allocate(ticker_id, client_id, client_order_id, new_market_order_id, side, price, leaves_qty, priority, nullptr,
+      auto order = order_pool_.allocate(ticker_id, client_id, client_order_id, new_market_order_id, side, price, leaves_quantity, priority, nullptr,
                                         nullptr);
       addOrder(order);
 
-      market_update_ = {MarketUpdateType::ADD, new_market_order_id, ticker_id, side, price, leaves_qty, priority};
+      market_update_ = {MarketUpdateType::ADD, new_market_order_id, ticker_id, side, price, leaves_quantity, priority};
       matching_engine_->sendMarketUpdate(&market_update_);
     }
   }
@@ -121,11 +121,11 @@ namespace Exchange {
     if (UNLIKELY(!is_cancelable)) 
     {
       client_response_ = {ClientResponseType::CANCEL_REJECTED, client_id, ticker_id, order_id, OrderId_INVALID,
-                          Side::INVALID, Price_INVALID, Qty_INVALID, Qty_INVALID};
+                          Side::INVALID, Price_INVALID, Quantity_INVALID, Quantity_INVALID};
     } else 
     {
       client_response_ = {ClientResponseType::CANCELED, client_id, ticker_id, order_id, exchange_order->market_order_id_,
-                          exchange_order->side_, exchange_order->price_, Qty_INVALID, exchange_order->qty_};
+                          exchange_order->side_, exchange_order->price_, Quantity_INVALID, exchange_order->quantity_};
       market_update_ = {MarketUpdateType::CANCEL, exchange_order->market_order_id_, ticker_id, exchange_order->side_, exchange_order->price_, 0,
                         exchange_order->priority_};
 
@@ -144,26 +144,26 @@ namespace Exchange {
 
     auto printer = [&](std::stringstream &ss, MEOrdersAtPrice *itr, Side side, Price &last_price, bool sanity_check) {
       char buf[4096];
-      Qty qty = 0;
+      Quantity quantity = 0;
       size_t num_orders = 0;
 
       for (auto o_itr = itr->first_me_order_;; o_itr = o_itr->next_order_) 
       {
-        qty += o_itr->qty_;
+        quantity += o_itr->quantity_;
         ++num_orders;
         if (o_itr->next_order_ == itr->first_me_order_)
           break;
       }
       sprintf(buf, " <px:%3s p:%3s n:%3s> %-3s @ %-5s(%-4s)",
               priceToString(itr->price_).c_str(), priceToString(itr->prev_entry_->price_).c_str(), priceToString(itr->next_entry_->price_).c_str(),
-              priceToString(itr->price_).c_str(), qtyToString(qty).c_str(), std::to_string(num_orders).c_str());
+              priceToString(itr->price_).c_str(), quantityToString(quantity).c_str(), std::to_string(num_orders).c_str());
       ss << buf;
       for (auto o_itr = itr->first_me_order_;; o_itr = o_itr->next_order_) 
       {
         if (detailed) 
         {
           sprintf(buf, "[oid:%s q:%s p:%s n:%s] ",
-                  orderIdToString(o_itr->market_order_id_).c_str(), qtyToString(o_itr->qty_).c_str(),
+                  orderIdToString(o_itr->market_order_id_).c_str(), quantityToString(o_itr->quantity_).c_str(),
                   orderIdToString(o_itr->prev_order_ ? o_itr->prev_order_->market_order_id_ : OrderId_INVALID).c_str(),
                   orderIdToString(o_itr->next_order_ ? o_itr->next_order_->market_order_id_ : OrderId_INVALID).c_str());
           ss << buf;

@@ -30,17 +30,17 @@ namespace Trading
                    market_update->toString().c_str());
 
       const auto bbo = book->getBBO();
-      const auto agg_qty_ratio = feature_engine_->getAggTradeQtyRatio();
+      const auto agg_quantity_ratio = feature_engine_->getAggTradeQuantityRatio();
 
-      if (LIKELY(bbo->bid_price_ != Price_INVALID && bbo->ask_price_ != Price_INVALID && agg_qty_ratio != Feature_INVALID)) {
-        logger_->log("%:% %() % % agg-qty-ratio:%\n", __FILE__, __LINE__, __FUNCTION__,
+      if (LIKELY(bbo->bid_price_ != Price_INVALID && bbo->ask_price_ != Price_INVALID && agg_quantity_ratio != Feature_INVALID)) {
+        logger_->log("%:% %() % % agg-quantity-ratio:%\n", __FILE__, __LINE__, __FUNCTION__,
                      Common::getCurrentTimeStr(&time_str_),
-                     bbo->toString().c_str(), agg_qty_ratio);
+                     bbo->toString().c_str(), agg_quantity_ratio);
 
         const auto clip = ticker_cfg_.at(market_update->ticker_id_).clip_;
         const auto threshold = ticker_cfg_.at(market_update->ticker_id_).threshold_;
 
-        if (agg_qty_ratio >= threshold) 
+        if (agg_quantity_ratio >= threshold) 
         {
           if (market_update->side_ == Side::BUY)
             order_manager_->moveOrders(market_update->ticker_id_, bbo->ask_price_, Price_INVALID, clip);

@@ -21,7 +21,7 @@ namespace Exchange
 
     ~MEOrderBook();
 
-    auto add(ClientId client_id, OrderId client_order_id, TickerId ticker_id, Side side, Price price, Qty qty) noexcept -> void;
+    auto add(ClientId client_id, OrderId client_order_id, TickerId ticker_id, Side side, Price price, Quantity quantity) noexcept -> void;
 
     auto cancel(ClientId client_id, OrderId order_id, TickerId ticker_id) noexcept -> void;
 
@@ -167,10 +167,10 @@ namespace Exchange
       return orders_at_price->first_me_order_->prev_order_->priority_ + 1;
     }
 
-    auto match(TickerId ticker_id, ClientId client_id, Side side, OrderId client_order_id, OrderId new_market_order_id, MEOrder* bid_itr, Qty* leaves_qty) noexcept;
+    auto match(TickerId ticker_id, ClientId client_id, Side side, OrderId client_order_id, OrderId new_market_order_id, MEOrder* bid_itr, Quantity* leaves_quantity) noexcept;
 
     auto
-    checkForMatch(ClientId client_id, OrderId client_order_id, TickerId ticker_id, Side side, Price price, Qty qty, Qty new_market_order_id) noexcept;
+    checkForMatch(ClientId client_id, OrderId client_order_id, TickerId ticker_id, Side side, Price price, Quantity quantity, Quantity new_market_order_id) noexcept;
 
     auto removeOrder(MEOrder *order) noexcept 
     {

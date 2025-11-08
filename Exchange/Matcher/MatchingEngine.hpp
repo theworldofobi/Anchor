@@ -33,7 +33,7 @@ namespace Exchange
         case ClientRequestType::NEW: 
         {
           order_book->add(client_request->client_id_, client_request->order_id_, client_request->ticker_id_,
-                           client_request->side_, client_request->price_, client_request->qty_);
+                           client_request->side_, client_request->price_, client_request->quantity_);
         }
           break;
 

@@ -44,8 +44,8 @@ namespace Trading
           break;
         case Exchange::ClientResponseType::FILLED: 
         {
-          order->qty_ = client_response->leaves_qty_;
-          if(!order->qty_)
+          order->quantity_ = client_response->leaves_quantity_;
+          if(!order->quantity_)
             order->order_state_ = OMOrderState::DEAD;
         }
           break;
@@ -75,13 +75,13 @@ namespace Trading
           {
           if(LIKELY(price != Price_INVALID)) 
           {
-            const auto risk_result = risk_manager_.checkPreTradeRisk(ticker_id, side, qty);
+            const auto risk_result = risk_manager_.checkPreTradeRisk(ticker_id, side, quantity);
             if(LIKELY(risk_result == RiskCheckResult::ALLOWED))
-              newOrder(order, ticker_id, price, side, qty);
+              newOrder(order, ticker_id, price, side, quantity);
             else
-              logger_->log("%:% %() % Ticker:% Side:% Qty:% RiskCheckResult:%\n", __FILE__, __LINE__, __FUNCTION__,
+              logger_->log("%:% %() % Ticker:% Side:% Quantity:% RiskCheckResult:%\n", __FILE__, __LINE__, __FUNCTION__,
                            Common::getCurrentTimeStr(&time_str_),
-                           tickerIdToString(ticker_id), sideToString(side), qtyToString(qty),
+                           tickerIdToString(ticker_id), sideToString(side), quantityToString(quantity),
                            riskCheckResultToString(risk_result));
           }
         }
@@ -92,7 +92,7 @@ namespace Trading
       }
     }
 
-    auto moveOrders(TickerId ticker_id, Price bid_price, Price ask_price, Qty clip) noexcept 
+    auto moveOrders(TickerId ticker_id, Price bid_price, Price ask_price, Quantity clip) noexcept 
     {
       auto bid_order = &(ticker_side_order_.at(ticker_id).at(sideToIndex(Side::BUY)));
       moveOrder(bid_order, ticker_id, bid_price, Side::BUY, clip);

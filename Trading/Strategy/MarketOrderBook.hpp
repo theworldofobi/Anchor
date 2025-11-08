@@ -32,14 +32,14 @@ namespace Trading
         if(bids_by_price_) 
         {
           bbo_.bid_price_ = bids_by_price_->price_;
-          bbo_.bid_qty_ = bids_by_price_->first_mkt_order_->qty_;
+          bbo_.bid_quantity_ = bids_by_price_->first_mkt_order_->quantity_;
           for(auto order = bids_by_price_->first_mkt_order_->next_order_; order != bids_by_price_->first_mkt_order_; order = order->next_order_)
-            bbo_.bid_qty_ += order->qty_;
+            bbo_.bid_quantity_ += order->quantity_;
         }
         else 
         {
           bbo_.bid_price_ = Price_INVALID;
-          bbo_.bid_qty_ = Qty_INVALID;
+          bbo_.bid_quantity_ = Quantity_INVALID;
         }
       }
 
@@ -48,14 +48,14 @@ namespace Trading
         if(asks_by_price_) 
         {
           bbo_.ask_price_ = asks_by_price_->price_;
-          bbo_.ask_qty_ = asks_by_price_->first_mkt_order_->qty_;
+          bbo_.ask_quantity_ = asks_by_price_->first_mkt_order_->quantity_;
           for(auto order = asks_by_price_->first_mkt_order_->next_order_; order != asks_by_price_->first_mkt_order_; order = order->next_order_)
-            bbo_.ask_qty_ += order->qty_;
+            bbo_.ask_quantity_ += order->quantity_;
         }
         else 
         {
           bbo_.ask_price_ = Price_INVALID;
-          bbo_.ask_qty_ = Qty_INVALID;
+          bbo_.ask_quantity_ = Quantity_INVALID;
         }
       }
     }

@@ -53,7 +53,7 @@ namespace Exchange
          << " ticker:" << tickerIdToString(ticker_id_)
          << " oid:" << orderIdToString(order_id_)
          << " side:" << sideToString(side_)
-         << " qty:" << quantityToString(quantity_)
+         << " quantity:" << quantityToString(quantity_)
          << " price:" << priceToString(price_)
          << "]";
       return ss.str();

@@ -61,8 +61,8 @@ namespace Exchange
          << " coid:" << orderIdToString(client_order_id_)
          << " moid:" << orderIdToString(market_order_id_)
          << " side:" << sideToString(side_)
-         << " exec_qty:" << quantityToString(exec_quantity_)
-         << " leaves_qty:" << quantityToString(leaves_quantity_)
+         << " exec_quantity:" << quantityToString(exec_quantity_)
+         << " leaves_quantity:" << quantityToString(leaves_quantity_)
          << " price:" << priceToString(price_)
          << "]";
       return ss.str();
