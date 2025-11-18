@@ -61,7 +61,6 @@ namespace Exchange
     std::string time_str_;
     Logger *logger_ = nullptr;
 
-  private:
     auto generateNewMarketOrderId() noexcept -> OrderId 
     {
       return next_market_order_id_++;
@@ -169,8 +168,7 @@ namespace Exchange
 
     auto match(TickerId ticker_id, ClientId client_id, Side side, OrderId client_order_id, OrderId new_market_order_id, MEOrder* bid_itr, Quantity* leaves_quantity) noexcept;
 
-    auto
-    checkForMatch(ClientId client_id, OrderId client_order_id, TickerId ticker_id, Side side, Price price, Quantity quantity, Quantity new_market_order_id) noexcept;
+    auto checkForMatch(ClientId client_id, OrderId client_order_id, TickerId ticker_id, Side side, Price price, Quantity quantity, Quantity new_market_order_id) noexcept;
 
     auto removeOrder(MEOrder *order) noexcept 
     {

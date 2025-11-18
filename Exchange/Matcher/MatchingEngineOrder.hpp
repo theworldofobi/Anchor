@@ -2,7 +2,7 @@
 
 #include <array>
 #include <sstream>
-#include "../../Common/Types.h"
+#include "../../Common/Types.hpp"
 
 using namespace Common;
 

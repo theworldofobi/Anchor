@@ -8,13 +8,12 @@
 
 #include "Macros.hpp"
 #include "LFQueue.hpp"
+#include "Types.hpp"
 #include "ThreadUtils.hpp"
 #include "TimeUtils.hpp"
 
 namespace Common 
 {
-  constexpr size_t LOG_QUEUE_SIZE = 8 * 1024 * 1024;
-
   enum class LogType : int8_t 
   {
     CHAR = 0,

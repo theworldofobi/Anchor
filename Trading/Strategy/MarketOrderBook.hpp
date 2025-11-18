@@ -98,7 +98,6 @@ namespace Trading
     std::string time_str_;
     Logger *logger_ = nullptr;
 
-  private:
     auto priceToIndex(Price price) const noexcept 
     {
       return (price % ME_MAX_PRICE_LEVELS);

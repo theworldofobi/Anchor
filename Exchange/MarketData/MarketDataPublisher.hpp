@@ -1,11 +1,11 @@
 #pragma once
 
 #include <chrono>
-#include <functional>
+// #include <functional>
 #include <thread>
 
 #include "../../Common/MCastSocket.hpp"
-#include "../../Common/Logger.hpp"
+#include "../../Common/Logging.hpp"
 #include "SnapshotSynthesizer.hpp"
 
 namespace Exchange 

@@ -13,6 +13,13 @@ namespace Exchange
     {
       ticker_order_book_[i] = new MEOrderBook(i, &logger_, this);
     }
+
+    /* C++20 range-based for loop
+    for(auto& book : ticker_order_book_) 
+    {
+      book = new MEOrderBook(i, &logger_, this);
+    }
+    */
   }
 
   MatchingEngine::~MatchingEngine() 
