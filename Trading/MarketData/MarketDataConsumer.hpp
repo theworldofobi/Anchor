@@ -1,10 +1,10 @@
 #pragma once
 
-#include <functional>
+// #include <functional>
 #include <map>
 
 #include "../../Common/ThreadUtils.hpp"
-#include "../../Common/LFQueue.hpp"
+// #include "../../Common/LFQueue.hpp"
 #include "../../Common/Macros.hpp"
 #include "../../Common/MCastSocket.hpp"
 
@@ -65,7 +65,6 @@ namespace Trading
     typedef std::map<size_t, Exchange::MEMarketUpdate> QueuedMarketUpdates;
     QueuedMarketUpdates snapshot_queued_msgs_, incremental_queued_msgs_;
 
-  private:
     auto run() noexcept -> void;
 
     auto recvCallback(McastSocket *socket) noexcept -> void;

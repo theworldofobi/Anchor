@@ -1,12 +1,13 @@
 #pragma once
 
-#include "../../Common/Macros.hpp"
+// #include "../../Common/Macros.hpp"
 #include "../../Common/Types.hpp"
 #include "../../Common/Logging.hpp"
 
 #include "../../Exchange/OrderServer/ClientResponse.hpp"
 
 #include "MarketOrderBook.hpp"
+// #include "OMOrder.hpp"
 
 using namespace Common;
 
@@ -18,7 +19,7 @@ namespace Trading
     double real_pnl_ = 0, unreal_pnl_ = 0, total_pnl_ = 0;
     std::array<double, sideToIndex(Side::MAX) + 1> open_vwap_;
     Quantity volume_ = 0;
-    const BBO *bbo_ = nullptr;
+    const BestBidOffer *bbo_ = nullptr;
 
     auto toString() const 
     {
@@ -85,7 +86,7 @@ namespace Trading
                   toString(), client_response->toString().c_str());
     }
 
-    auto updateBBO(const BBO *bbo, Logger *logger) noexcept 
+    auto updateBestBidOffer(const BestBidOffer *bbo, Logger *logger) noexcept 
     {
       std::string time_str;
       bbo_ = bbo;
@@ -140,9 +141,9 @@ namespace Trading
       ticker_position_.at(client_response->ticker_id_).addFill(client_response, logger_);
     }
 
-    auto updateBBO(TickerId ticker_id, const BBO *bbo) noexcept 
+    auto updateBestBidOffer(TickerId ticker_id, const BestBidOffer *bbo) noexcept 
     {
-      ticker_position_.at(ticker_id).updateBBO(bbo, logger_);
+      ticker_position_.at(ticker_id).updateBestBidOffer(bbo, logger_);
     }
 
     auto getPositionInfo(TickerId ticker_id) const noexcept 

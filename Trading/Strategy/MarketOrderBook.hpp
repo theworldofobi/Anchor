@@ -25,7 +25,7 @@ namespace Trading
       trade_engine_ = trade_engine;
     }
 
-    auto updateBBO(bool update_bid, bool update_ask) noexcept 
+    auto updateBestBidOffer(bool update_bid, bool update_ask) noexcept 
     {
       if(update_bid) 
       {
@@ -60,7 +60,7 @@ namespace Trading
       }
     }
 
-    auto getBBO() const noexcept -> const BBO* 
+    auto getBestBidOffer() const noexcept -> const BestBidOffer* 
     {
       return &bbo_;
     }
@@ -93,7 +93,7 @@ namespace Trading
 
     MemPool<MarketOrder> order_pool_;
 
-    BBO bbo_;
+    BestBidOffer bbo_;
 
     std::string time_str_;
     Logger *logger_ = nullptr;

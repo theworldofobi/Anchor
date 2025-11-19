@@ -1,9 +1,13 @@
 #pragma once
 
-#include "../../Common/ThreadUtils.hpp"
+#include "../../Common/Logging.hpp"
 #include "../../Common/Macros.hpp"
+// #include "../../Common/ThreadUtils.hpp"
+#include "../../Common/TimeUtils.hpp"
 
 #include "ClientRequest.hpp"
+
+#include <algorithm>
 
 namespace Exchange 
 {

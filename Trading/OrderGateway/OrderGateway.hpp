@@ -1,6 +1,6 @@
 #pragma once
 
-#include <functional>
+// #include <functional>
 
 #include "../../Common/ThreadUtils.hpp"
 #include "../../Common/Macros.hpp"
@@ -70,7 +70,6 @@ namespace Trading
     size_t next_exp_seq_num_ = 1;
     Common::TCPSocket tcp_socket_;
 
-  private:
     auto run() noexcept -> void;
 
     auto recvCallback(TCPSocket *socket, Nanos rx_time) noexcept -> void;

@@ -4,7 +4,12 @@
 #include "../../Common/Logging.hpp"
 #include "../../Common/Types.hpp"
 
+#include "../../Exchange/MarketData/MarketUpdate.hpp"
+
+#include "MarketOrderBook.hpp"
+
 using namespace Common;
+using namespace Exchange;
 
 namespace Trading 
 {
@@ -18,7 +23,7 @@ namespace Trading
 
     auto onOrderBookUpdate(TickerId ticker_id, Price price, Side side, MarketOrderBook* book) noexcept -> void 
     {
-      const auto bbo = book->getBBO();
+      const auto bbo = book->getBestBidOffer();
       if(LIKELY(bbo->bid_price_ != Price_INVALID && bbo->ask_price_ != Price_INVALID)) 
       {
         mkt_price_ = (bbo->bid_price_ * bbo->ask_quantity_ + bbo->ask_price_ * bbo->bid_quantity_) / static_cast<double>(bbo->bid_quantity_ + bbo->ask_quantity_);
@@ -31,7 +36,7 @@ namespace Trading
 
     auto onTradeUpdate(const Exchange::MEMarketUpdate *market_update, MarketOrderBook* book) noexcept -> void 
     {
-      const auto bbo = book->getBBO();
+      const auto bbo = book->getBestBidOffer();
       if(LIKELY(bbo->bid_price_ != Price_INVALID && bbo->ask_price_ != Price_INVALID)) 
       {
         agg_trade_quantity_ratio_ = static_cast<double>(market_update->quantity_) / (market_update->side_ == Side::BUY ? bbo->ask_quantity_ : bbo->bid_quantity_);

@@ -1,5 +1,4 @@
 #include "MarketMaker.hpp"
-
 #include "TradeEngine.hpp"
 
 namespace Trading 

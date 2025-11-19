@@ -1,8 +1,8 @@
 #pragma once
 
-#include <functional>
+// #include <functional>
 
-#include "../../Common/ThreadUtils.hpp"
+// #include "../../Common/ThreadUtils.hpp"
 #include "../../Common/Macros.hpp"
 #include "../../Common/TCPServer.hpp"
 
@@ -15,7 +15,9 @@ namespace Exchange
   class OrderServer 
   {
   public:
-    OrderServer(ClientRequestLFQueue *client_requests, ClientResponseLFQueue *client_responses, const std::string &iface, int port);
+    OrderServer(ClientRequestLFQueue *client_requests, 
+                ClientResponseLFQueue *client_responses, 
+                const std::string &iface, int port);
 
     ~OrderServer();
 

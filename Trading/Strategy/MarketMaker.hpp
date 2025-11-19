@@ -23,7 +23,7 @@ namespace Trading
                    Common::getCurrentTimeStr(&time_str_), ticker_id, Common::priceToString(price).c_str(),
                    Common::sideToString(side).c_str());
 
-      const auto bbo = book->getBBO();
+      const auto bbo = book->getBestBidOffer();
       const auto fair_price = feature_engine_->getMktPrice();
 
       if (LIKELY(bbo->bid_price_ != Price_INVALID && bbo->ask_price_ != Price_INVALID && fair_price != Feature_INVALID)) 

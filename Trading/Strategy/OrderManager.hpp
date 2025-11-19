@@ -75,7 +75,7 @@ namespace Trading
           {
           if(LIKELY(price != Price_INVALID)) 
           {
-            const auto risk_result = risk_manager_.checkPreTradeRisk(ticker_id, side, quantity);
+            auto risk_result = risk_manager_.checkPreTradeRisk(ticker_id, side, quantity);
             if(LIKELY(risk_result == RiskCheckResult::ALLOWED))
               newOrder(order, ticker_id, price, side, quantity);
             else
@@ -101,9 +101,9 @@ namespace Trading
       moveOrder(ask_order, ticker_id, ask_price, Side::SELL, clip);
     }
 
-    auto getOMOrderSideHashMap(TickerId ticker_id) const 
+    auto getOMOrderSideHashMap(TickerId ticker_id) const
     {
-      return &(ticker_side_order_.at(ticker_id));
+      return ticker_side_order_.at(ticker_id);
     }
 
     // Deleted default, copy & move constructors and assignment-operators.

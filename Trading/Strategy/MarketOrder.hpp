@@ -71,7 +71,7 @@ namespace Trading
 
   typedef std::array<MarketOrdersAtPrice *, ME_MAX_PRICE_LEVELS> OrdersAtPriceHashMap;
 
-  struct BBO 
+  struct BestBidOffer 
   {
     Price bid_price_ = Price_INVALID, ask_price_ = Price_INVALID;
     Quantity bid_quantity_ = Quantity_INVALID, ask_quantity_ = Quantity_INVALID;

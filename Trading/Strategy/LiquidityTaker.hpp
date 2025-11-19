@@ -29,7 +29,7 @@ namespace Trading
       logger_->log("%:% %() % %\n", __FILE__, __LINE__, __FUNCTION__, Common::getCurrentTimeStr(&time_str_),
                    market_update->toString().c_str());
 
-      const auto bbo = book->getBBO();
+      const auto bbo = book->getBestBidOffer();
       const auto agg_quantity_ratio = feature_engine_->getAggTradeQuantityRatio();
 
       if (LIKELY(bbo->bid_price_ != Price_INVALID && bbo->ask_price_ != Price_INVALID && agg_quantity_ratio != Feature_INVALID)) {

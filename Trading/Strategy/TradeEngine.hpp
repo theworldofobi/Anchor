@@ -4,7 +4,7 @@
 
 #include "../../Common/ThreadUtils.hpp"
 #include "../../Common/TimeUtils.hpp"
-#include "../../Common/LFQueue.hpp"
+// #include "../../Common/LFQueue.hpp"
 #include "../../Common/Macros.hpp"
 #include "../../Common/Logging.hpp"
 
@@ -43,7 +43,7 @@ namespace Trading
 
     auto stop() -> void 
     {
-      while(incoming_ogw_responses_->size() || incoming_md_updates_->size()) 
+      while (incoming_ogw_responses_->size() || incoming_md_updates_->size()) 
       {
         logger_.log("%:% %() % Sleeping till all updates are consumed ogw-size:% md-size:%\n", __FILE__, __LINE__, __FUNCTION__,
                     Common::getCurrentTimeStr(&time_str_), incoming_ogw_responses_->size(), incoming_md_updates_->size());

@@ -84,7 +84,7 @@ namespace Trading
         break;
     }
 
-    updateBBO(bid_updated, ask_updated);
+    updateBestBidOffer(bid_updated, ask_updated);
 
     logger_->log("%:% %() % % %", __FILE__, __LINE__, __FUNCTION__,
                  Common::getCurrentTimeStr(&time_str_), market_update->toString(), bbo_.toString());

@@ -111,7 +111,7 @@ namespace Trading
                 Common::getCurrentTimeStr(&time_str_), ticker_id, Common::priceToString(price).c_str(),
                 Common::sideToString(side).c_str());
 
-    position_keeper_.updateBBO(ticker_id, book->getBBO());
+    position_keeper_.updateBestBidOffer(ticker_id, book->getBestBidOffer());
 
     feature_engine_.onOrderBookUpdate(ticker_id, price, side, book);
 
