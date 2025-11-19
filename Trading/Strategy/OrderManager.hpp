@@ -66,8 +66,12 @@ namespace Trading
       {
         case OMOrderState::LIVE: 
         {
-          if(order->price_ != price)
+          if (order->price_ != price)
+          {
+            START_MEASURE(Trading_OrderManager_cancelOrder);
             cancelOrder(order);
+            END_MEASURE(Trading_OrderManager_cancelOrder, (*logger_));
+          }
         }
           break;
         case OMOrderState::INVALID:
@@ -75,14 +79,22 @@ namespace Trading
           {
           if(LIKELY(price != Price_INVALID)) 
           {
-            auto risk_result = risk_manager_.checkPreTradeRisk(ticker_id, side, quantity);
+            START_MEASURE(Trading_RiskManager_checkPreTradeRisk);
+            const auto risk_result = risk_manager_.checkPreTradeRisk(ticker_id, side, quantity);
+            END_MEASURE(Trading_RiskManager_checkPreTradeRisk, (*logger_));
+            
             if(LIKELY(risk_result == RiskCheckResult::ALLOWED))
+            {
+              START_MEASURE(Trading_OrderManager_newOrder);
               newOrder(order, ticker_id, price, side, quantity);
-            else
+              END_MEASURE(Trading_OrderManager_newOrder, (*logger_));  
+            } else
+            {
               logger_->log("%:% %() % Ticker:% Side:% Quantity:% RiskCheckResult:%\n", __FILE__, __LINE__, __FUNCTION__,
                            Common::getCurrentTimeStr(&time_str_),
                            tickerIdToString(ticker_id), sideToString(side), quantityToString(quantity),
-                           riskCheckResultToString(risk_result));
+                           riskCheckResultToString(risk_result));  
+            }
           }
         }
           break;
@@ -95,10 +107,14 @@ namespace Trading
     auto moveOrders(TickerId ticker_id, Price bid_price, Price ask_price, Quantity clip) noexcept 
     {
       auto bid_order = &(ticker_side_order_.at(ticker_id).at(sideToIndex(Side::BUY)));
+      START_MEASURE(Trading_OrderManager_moveBidOrder);
       moveOrder(bid_order, ticker_id, bid_price, Side::BUY, clip);
+      END_MEASURE(Trading_OrderManager_moveBidOrder, (*logger_));
 
       auto ask_order = &(ticker_side_order_.at(ticker_id).at(sideToIndex(Side::SELL)));
+      START_MEASURE(Trading_OrderManager_moveAskOrder);
       moveOrder(ask_order, ticker_id, ask_price, Side::SELL, clip);
+      END_MEASURE(Trading_OrderManager_moveAskOrder, (*logger_));
     }
 
     auto getOMOrderSideHashMap(TickerId ticker_id) const

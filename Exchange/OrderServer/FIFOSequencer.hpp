@@ -34,21 +34,23 @@ namespace Exchange
     auto sequenceAndPublish() {
       if (UNLIKELY(!pending_size_))
         return;
-
+#if !defined (NDEBUG)
       logger_->log("%:% %() % Processing % requests.\n", __FILE__, __LINE__, __FUNCTION__, Common::getCurrentTimeStr(&time_str_), pending_size_);
-
+#endif
       std::sort(pending_client_requests_.begin(), pending_client_requests_.begin() + pending_size_);
 
       for (size_t i = 0; i < pending_size_; ++i) 
       {
         const auto &client_request = pending_client_requests_.at(i);
 
+#if !defined (NDEBUG)
         logger_->log("%:% %() % Writing RX:% Req:% to FIFO.\n", __FILE__, __LINE__, __FUNCTION__, Common::getCurrentTimeStr(&time_str_),
                      client_request.recv_time_, client_request.request_.toString());
-
+#endif
         auto next_write = incoming_requests_->getNextToWriteTo();
         *next_write = std::move(client_request.request_);
         incoming_requests_->updateWriteIndex();
+        TTT_MEASURE(T2_OrderServer_LFQueue_write, (*logger_));
       }
 
       pending_size_ = 0;

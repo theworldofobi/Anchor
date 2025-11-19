@@ -1,7 +1,7 @@
 #pragma once
 
 #include <iostream>
-#include <atomic>
+// #include <atomic>
 #include <thread>
 #include <unistd.h>
 

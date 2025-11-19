@@ -34,8 +34,10 @@ namespace Common
     auto deallocate(const T *elem) noexcept 
     {
       const auto elem_index = (reinterpret_cast<const ObjectBlock *>(elem) - &store_[0]);
+#if !defined (NDEBUG)
       ASSERT(elem_index >= 0 && static_cast<size_t>(elem_index) < store_.size(), "Element being deallocated does not belong to this Memory pool.");
-      ASSERT(!store_[elem_index].is_free_, "Expected in-use ObjectBlock at index:" + std::to_string(elem_index));
+      ASSERT( !store_[elem_index].is_free_, "Expected in-use ObjectBlock at index:" + std::to_string(elem_index));
+#endif
       store_[elem_index].is_free_ = true;
     }
 

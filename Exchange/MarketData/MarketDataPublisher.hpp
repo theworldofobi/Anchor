@@ -32,7 +32,7 @@ namespace Exchange
     {
       run_ = true;
 
-      ASSERT(Common::createAndStartThread(-1, "Exchange/MarketDataPublisher", [this]() { run(); }) != nullptr, "Failed to start MarketData thread.");
+      ASSERT(Common::createAndStartThread(0, "Exchange/MarketDataPublisher", [this]() { run(); }) != nullptr, "Failed to start MarketData thread.");
 
       snapshot_synthesizer_->start();
     }

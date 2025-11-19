@@ -32,7 +32,7 @@ namespace Trading
       run_ = true;
       ASSERT(tcp_socket_.connect(ip_, iface_, port_, false) >= 0,
              "Unable to connect to ip:" + ip_ + " port:" + std::to_string(port_) + " on iface:" + iface_ + " error:" + std::string(std::strerror(errno)));
-      ASSERT(Common::createAndStartThread(-1, "Trading/OrderGateway", [this]() { run(); }) != nullptr, "Failed to start OrderGateway thread.");
+      ASSERT(Common::createAndStartThread(4, "Trading/OrderGateway", [this]() { run(); }) != nullptr, "Failed to start OrderGateway thread.");
     }
 
     auto stop() -> void 

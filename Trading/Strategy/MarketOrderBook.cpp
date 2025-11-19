@@ -31,7 +31,10 @@ namespace Trading
       {
         auto order = order_pool_.allocate(market_update->order_id_, market_update->side_, market_update->price_,
                                           market_update->quantity_, market_update->priority_, nullptr, nullptr);
+        
+        START_MEASURE(Trading_MarketOrderBook_addOrder);
         addOrder(order);
+        END_MEASURE(Trading_MarketOrderBook_addOrder, (*logger_));
       }
         break;
       case Exchange::MarketUpdateType::MODIFY: 
@@ -43,7 +46,9 @@ namespace Trading
       case Exchange::MarketUpdateType::CANCEL: 
       {
         auto order = oid_to_order_.at(market_update->order_id_);
+        START_MEASURE(Trading_MarketOrderBook_removeOrder);
         removeOrder(order);
+        END_MEASURE(Trading_MarketOrderBook_removeOrder, (*logger_));
       }
         break;
       case Exchange::MarketUpdateType::TRADE: 
@@ -83,8 +88,9 @@ namespace Trading
       case Exchange::MarketUpdateType::SNAPSHOT_END:
         break;
     }
-
+    START_MEASURE(Trading_MarketOrderBook_updateBBO);
     updateBestBidOffer(bid_updated, ask_updated);
+    END_MEASURE(Trading_MarketOrderBook_updateBBO, (*logger_));
 
     logger_->log("%:% %() % % %", __FILE__, __LINE__, __FUNCTION__,
                  Common::getCurrentTimeStr(&time_str_), market_update->toString(), bbo_.toString());

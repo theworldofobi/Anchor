@@ -24,7 +24,8 @@ namespace Common
     UNSIGNED_LONG_INTEGER = 5,
     UNSIGNED_LONG_LONG_INTEGER = 6,
     FLOAT = 7,
-    DOUBLE = 8
+    DOUBLE = 8,
+    STRING = 9
   };
 
   struct LogElement 
@@ -41,6 +42,7 @@ namespace Common
       unsigned long long ull;
       float f;
       double d;
+      char str[32];
     } u_;
   };
 
@@ -80,6 +82,9 @@ namespace Common
               break;
             case LogType::DOUBLE:
               file_ << next->u_.d;
+              break;
+            case LogType::STRING:
+              file_ << next->u_.str;
               break;
           }
           queue_.updateReadIndex();

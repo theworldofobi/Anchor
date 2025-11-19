@@ -28,7 +28,7 @@ namespace Exchange
   {
     run_ = true;
     tcp_server_.listen(iface_, port_);
-    ASSERT(Common::createAndStartThread(-1, "Exchange/OrderServer", 
+    ASSERT(Common::createAndStartThread(2, "Exchange/OrderServer", 
       [this](){ run(); }), "Failed to start OrderServer thread");
   }
 
